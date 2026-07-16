@@ -1,0 +1,2952 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Украина РП</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 14px;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0.2;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid #1a3a5c;
+            margin-bottom: 30px;
+            background: linear-gradient(180deg, #0d1b2a 0%, transparent 100%);
+            border-radius: 0 0 20px 20px;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            letter-spacing: 5px;
+        }
+
+        header p {
+            color: #8899aa;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .auth-box {
+            background: rgba(15, 25, 45, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 350px;
+            border: 1px solid #1a3a5c;
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-box h2 {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .auth-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #1a3a5c;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .auth-box input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .auth-box button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0a0a0a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-box button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .auth-box .error {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .auth-box .success {
+            color: #4ecdc4;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .auth-box .switch-link {
+            color: #4ecdc4;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .auth-box .switch-link:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            background: rgba(20, 30, 50, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #1a3a5c;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: #8899aa;
+            border: 2px solid transparent;
+            padding: 10px 18px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tab-btn:hover {
+            color: #ffd700;
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .tab-btn.active {
+            color: #0a0a0a;
+            background: #ffd700;
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .tab-btn.admin-tab {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .tab-btn.admin-tab.active {
+            background: #ff6b6b;
+            color: #0a0a0a;
+            border-color: #ff6b6b;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rules-block {
+            background: rgba(15, 25, 45, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffd700;
+            backdrop-filter: blur(10px);
+            border: 1px solid #1a3a5c;
+            transition: all 0.3s ease;
+        }
+
+        .rules-block:hover {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
+        }
+
+        .rules-block h2 {
+            color: #ffd700;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #1a3a5c;
+            padding-bottom: 10px;
+        }
+
+        .rules-block h3 {
+            color: #e0e0e0;
+            font-size: 1.3rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .rules-block p {
+            color: #b0c0d0;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 2px solid #1a3a5c;
+        }
+
+        .rules-block .punishment {
+            color: #ff6b6b;
+            font-weight: 700;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 2px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .rules-block .rule-number {
+            color: #ffd700;
+            font-weight: 900;
+            margin-right: 10px;
+        }
+
+        .koap-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .koap-item {
+            background: rgba(10, 20, 35, 0.8);
+            border-radius: 12px;
+            padding: 15px 20px;
+            border-left: 3px solid #ffd700;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .koap-item:hover {
+            border-left-color: #ff6b6b;
+            background: rgba(20, 35, 60, 0.9);
+            transform: translateX(5px);
+        }
+
+        .koap-item .koap-title {
+            color: #ffd700;
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 150px;
+        }
+
+        .koap-item .koap-desc {
+            color: #b0c0d0;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+
+        .koap-item .koap-punish {
+            color: #ff6b6b;
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 4px 12px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .koap-section-title {
+            color: #4ecdc4;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #1a3a5c;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .rp-card {
+            background: rgba(15, 25, 45, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #1a3a5c;
+            transition: all 0.3s ease;
+        }
+
+        .rp-card:hover {
+            border-color: #ffd700;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .rp-card .rp-name {
+            color: #ffd700;
+            font-size: 1.3rem;
+            font-weight: 900;
+        }
+
+        .rp-card .rp-desc {
+            color: #b0c0d0;
+            margin: 10px 0;
+        }
+
+        .rp-card .rp-punish {
+            color: #ff6b6b;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .resource-btn {
+            display: block;
+            background: linear-gradient(135deg, #1a2a4a, #0d1b2a);
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: 2px solid #1a3a5c;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .resource-btn:hover {
+            transform: scale(1.05);
+            border-color: #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+        }
+
+        .resource-btn .icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .resource-btn .label {
+            display: block;
+        }
+
+        .resource-btn .sub {
+            font-size: 0.8rem;
+            color: #8899aa;
+            font-weight: 400;
+            margin-top: 5px;
+        }
+
+        .admins-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .admin-card {
+            background: rgba(15, 25, 45, 0.9);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            border: 1px solid #1a3a5c;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .admin-card:hover {
+            border-color: #ffd700;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .admin-card .avatar {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .admin-card .name {
+            color: #ffd700;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .admin-card .role {
+            color: #8899aa;
+            font-size: 0.95rem;
+            margin-top: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .admin-card .telegram-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #4ecdc4;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 5px 15px;
+            border: 1px solid #4ecdc4;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .admin-card .telegram-link:hover {
+            background: #4ecdc4;
+            color: #0a0a0a;
+        }
+
+        .admin-card .badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        .badge-owner {
+            background: #ffd700;
+            color: #0a0a0a;
+        }
+
+        .badge-gladmin {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .badge-stadmin {
+            background: #ff8800;
+            color: #fff;
+        }
+
+        .badge-admin {
+            background: #00aaff;
+            color: #fff;
+        }
+
+        .badge-mladmin {
+            background: #44dd88;
+            color: #0a0a0a;
+        }
+
+        .badge-zam {
+            background: #a855f7;
+            color: #fff;
+        }
+
+        .badge-curator {
+            background: #f59e0b;
+            color: #0a0a0a;
+        }
+
+        .badge-trainee {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+        .badge-techadmin {
+            background: #00ccff;
+            color: #0a0a0a;
+        }
+
+        .admin-card.pinned {
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.95), rgba(10, 20, 40, 0.95));
+        }
+
+        .admin-card.pinned::before {
+            content: '⭐ ВЛАДЕЛЕЦ';
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: #ffd700;
+            color: #0a0a0a;
+            padding: 2px 15px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .complaint-form textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #1a3a5c;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            margin: 8px 0;
+        }
+
+        .complaint-form textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .complaint-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #1a3a5c;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .complaint-form input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .complaint-form button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0a0a0a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .complaint-form button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .ticket-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ticket-card {
+            background: rgba(15, 25, 45, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #1a3a5c;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-card:hover {
+            border-color: #ffd700;
+            transform: translateX(5px);
+        }
+
+        .ticket-card .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .ticket-card .ticket-user {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .ticket-card .ticket-status {
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .ticket-status.open {
+            background: #4ecdc4;
+            color: #0a0a0a;
+        }
+
+        .ticket-status.closed {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+        .ticket-card .ticket-preview {
+            color: #8899aa;
+            margin-top: 8px;
+        }
+
+        .chat-box {
+            background: rgba(10, 20, 35, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 15px 0;
+            border: 1px solid #1a3a5c;
+        }
+
+        .chat-message {
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .chat-message.user {
+            background: #1a3a5c;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .chat-message.admin {
+            background: #2a1a3c;
+            border-left: 3px solid #ffd700;
+        }
+
+        .chat-message .msg-user {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #8899aa;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #1a3a5c;
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        .chat-input button {
+            padding: 12px 25px;
+            background: #ffd700;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #0a0a0a;
+            cursor: pointer;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .admin-card-panel {
+            background: rgba(15, 25, 45, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #1a3a5c;
+            transition: all 0.3s ease;
+        }
+
+        .admin-card-panel:hover {
+            border-color: #ffd700;
+            transform: translateY(-5px);
+        }
+
+        .admin-card-panel .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #ffd700;
+        }
+
+        .admin-card-panel .stat-label {
+            color: #8899aa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .btn-gold {
+            background: #ffd700;
+            color: #0a0a0a;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-red {
+            background: #ff6b6b;
+            color: #0a0a0a;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-red:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .admin-user-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .admin-user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 20, 35, 0.8);
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid #1a3a5c;
+        }
+
+        .admin-user-item .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .admin-user-item .user-role {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .creator-block {
+            background: linear-gradient(135deg, rgba(15, 25, 45, 0.95), rgba(30, 50, 80, 0.9));
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.1);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .creator-block:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 80px rgba(255, 215, 0, 0.15);
+        }
+
+        .creator-block h2 {
+            color: #ffd700;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .creator-block .creator-name {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .creator-block .creator-desc {
+            color: #b0c0d0;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .creator-block .telegram-link-big {
+            display: inline-block;
+            margin-top: 15px;
+            color: #4ecdc4;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 10px 30px;
+            border: 2px solid #4ecdc4;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .creator-block .telegram-link-big:hover {
+            background: #4ecdc4;
+            color: #0a0a0a;
+            transform: scale(1.05);
+        }
+
+        .creator-block .heart {
+            color: #ff6b6b;
+            font-size: 2rem;
+            display: inline-block;
+            animation: pulseHeart 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseHeart {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        .creator-block .free-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 8px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+
+        .click-counter {
+            color: #556677;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            opacity: 0.5;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: modalFadeIn 0.5s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a2a4a, #0d1b2a);
+            border: 3px solid #ffd700;
+            border-radius: 30px;
+            padding: 60px 80px;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 100px rgba(255, 215, 0, 0.2);
+        }
+
+        .modal-content .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 3rem;
+            color: #ff6b6b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .modal-content .modal-close:hover {
+            transform: rotate(90deg) scale(1.2);
+            color: #ff4444;
+        }
+
+        .modal-content .big-emoji {
+            font-size: 6rem;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .modal-content h2 {
+            color: #ffd700;
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: #b0c0d0;
+            font-size: 1.3rem;
+            line-height: 1.8;
+        }
+
+        .modal-content .highlight {
+            color: #ffd700;
+            font-weight: 900;
+        }
+
+        .modal-content .glow-text {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #f0a500, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            margin: 20px 0;
+        }
+
+        .user-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 30, 50, 0.8);
+            padding: 10px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #1a3a5c;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .user-bar .user-info {
+            color: #b0c0d0;
+        }
+
+        .user-bar .user-info strong {
+            color: #ffd700;
+        }
+
+        .user-bar .logout-btn {
+            padding: 6px 20px;
+            background: #ff6b6b;
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0a;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .user-bar .logout-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .logs-container {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid #1a3a5c;
+        }
+
+        .log-entry {
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #1a3a5c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .log-entry .log-time {
+            color: #8899aa;
+            font-size: 0.8rem;
+        }
+
+        .log-entry .log-user {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .log-entry .log-action {
+            color: #4ecdc4;
+        }
+
+        .log-entry .log-target {
+            color: #ff6b6b;
+        }
+
+        .log-entry.log-remove {
+            border-left: 3px solid #ff6b6b;
+        }
+
+        .log-entry.log-add {
+            border-left: 3px solid #4ecdc4;
+        }
+
+        .log-entry.log-edit {
+            border-left: 3px solid #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .tab-btn {
+                text-align: center;
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+
+            .auth-box {
+                width: 100%;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .modal-content h2 {
+                font-size: 2rem;
+            }
+
+            .koap-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .koap-item .koap-punish {
+                white-space: normal;
+            }
+
+            .log-entry {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f0a500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="snow-container"></div>
+
+    <div class="modal-overlay" id="easterEggModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalCloseBtn">✕</button>
+            <span class="big-emoji">🎉</span>
+            <h2>🔥 ТЫ НАШЕЛ ПАСХАЛКУ!</h2>
+            <p><span class="highlight">trepow - Just_Simoo</span><br>Делает добро для проекта Украина РП ❤️</p>
+            <div class="glow-text">✧ СПАСИБО ЗА ПОДДЕРЖКУ ✧</div>
+            <p style="font-size:1rem; color:#8899aa;">
+                📱 <a href="https://t.me/trepoweditor" target="_blank"
+                    style="color:#4ecdc4; text-decoration:none;">@trepoweditor</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <header>
+            <h1>🇺🇦 УКРАИНА РП</h1>
+            <p>⚔️ Сервер ролевой игры • Правила и ресурсы</p>
+        </header>
+
+        <div id="authSection">
+            <div class="auth-container">
+                <div class="auth-box" id="loginBox">
+                    <h2>🔐 Вход</h2>
+                    <input type="text" id="loginUser" placeholder="Логин">
+                    <input type="password" id="loginPass" placeholder="Пароль">
+                    <div id="loginError" class="error"></div>
+                    <button id="loginBtn">Войти</button>
+                    <span class="switch-link" id="showRegisterLink">Нет аккаунта? Зарегистрироваться</span>
+                </div>
+                <div class="auth-box hidden" id="registerBox">
+                    <h2>📝 Регистрация</h2>
+                    <input type="text" id="regUser" placeholder="Логин">
+                    <input type="password" id="regPass" placeholder="Пароль">
+                    <input type="text" id="regNick" placeholder="Ваш ник в игре">
+                    <div id="regError" class="error"></div>
+                    <div id="regSuccess" class="success"></div>
+                    <button id="registerBtn">Зарегистрироваться</button>
+                    <span class="switch-link" id="showLoginLink">Уже есть аккаунт? Войти</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="appSection" class="hidden">
+            <div class="user-bar">
+                <div class="user-info">👤 <strong id="currentUserDisplay">Пользователь</strong> | Роль: <span
+                        id="currentRoleDisplay">user</span></div>
+                <button class="logout-btn" id="logoutBtn">🚪 Выйти</button>
+            </div>
+
+            <div class="tabs" id="mainTabs">
+                <button class="tab-btn active" data-tab="rules">📜 Правила</button>
+                <button class="tab-btn" data-tab="rp">🎭 RP</button>
+                <button class="tab-btn" data-tab="koap">⚖️ КОАП</button>
+                <button class="tab-btn" data-tab="resources">📦 Ресурсы</button>
+                <button class="tab-btn" data-tab="admins">👑 Админы</button>
+                <button class="tab-btn" data-tab="complaint">📩 Жалоба</button>
+                <button class="tab-btn" data-tab="tickets">🎫 Тикеты</button>
+                <button class="tab-btn admin-tab hidden" id="adminPanelBtn" data-tab="adminpanel">⚙️
+                    Админ-панель</button>
+                <button class="tab-btn" data-tab="creator">💛 Владелец</button>
+            </div>
+
+            <!-- ===== ВКЛАДКИ (сокращены для экономии места, но все правила есть) ===== -->
+            <div id="tab-rules" class="tab-content active">
+                <div class="rules-block">
+                    <h2>📜 Правила сервера</h2>
+                    <h3>1. Общие положения</h3>
+                    <p><span class="rule-number">1.1.</span> Заходя на сервер, каждый игрок автоматически соглашается с
+                        действующими правилами.</p>
+                    <p><span class="rule-number">1.2.</span> Незнание правил не освобождает от ответственности.</p>
+                    <p><span class="rule-number">1.3.</span> Запрещено искать лазейки в правилах.</p>
+                    <p class="punishment">⚡ Наказание: предупреждение или бан до 1 дня.</p>
+                    <h3>2. Общение</h3>
+                    <p><span class="rule-number">2.1.</span> Запрещены оскорбления, унижения, угрозы.</p>
+                    <p class="punishment">⚡ Наказание: бан от 2 часов до 1 дня.</p>
+                    <p><span class="rule-number">2.2.</span> Запрещены спам и флуд.</p>
+                    <p class="punishment">⚡ Наказание: бан от 1 до 6 часов.</p>
+                    <p><span class="rule-number">2.3.</span> Запрещена реклама сторонних проектов.</p>
+                    <p class="punishment">⚡ Наказание: бан от 1 до 3 дней.</p>
+                    <h3>3. Игровой процесс</h3>
+                    <p><span class="rule-number">3.1.</span> Запрещены читы и стороннее ПО.</p>
+                    <p class="punishment">⚡ Наказание: бан от 3 до 7 дней.</p>
+                    <p><span class="rule-number">3.2.</span> Запрещено использовать баги.</p>
+                    <p class="punishment">⚡ Наказание: бан от 1 до 3 дней.</p>
+                    <p><span class="rule-number">3.3.</span> Запрещено мешать игровому процессу.</p>
+                    <p class="punishment">⚡ Наказание: предупреждение или бан до 1 дня.</p>
+                    <h3>4. Уход от администрации</h3>
+                    <p><span class="rule-number">4.1.</span> Во время проверки игрок обязан оставаться на сервере.</p>
+                    <p class="punishment">⚡ Наказание: бан от 1 до 3 дней.</p>
+                    <h3>5. Обман администрации</h3>
+                    <p><span class="rule-number">5.1.</span> Запрещено предоставлять ложную информацию.</p>
+                    <p class="punishment">⚡ Наказание: бан от 1 до 3 дней.</p>
+                    <h3>6. Обход наказания</h3>
+                    <p><span class="rule-number">6.1.</span> Запрещено использовать дополнительные аккаунты.</p>
+                    <p class="punishment">⚡ Наказание: бан до 5 дней.</p>
+                    <h3>7. Аккаунт</h3>
+                    <p><span class="rule-number">7.1.</span> Владелец аккаунта несет ответственность.</p>
+                    <h3>8. Никнейм</h3>
+                    <p><span class="rule-number">8.1.</span> Запрещены никнеймы с нецензурной лексикой.</p>
+                    <p class="punishment">⚡ Наказание: требование сменить никнейм или бан до 1 дня.</p>
+                    <h3>9. Жалобы</h3>
+                    <p><span class="rule-number">9.1.</span> Жалобы должны сопровождаться доказательствами.</p>
+                    <p><span class="rule-number">9.2.</span> Запрещены ложные жалобы.</p>
+                    <p class="punishment">⚡ Наказание: предупреждение или бан до 1 дня.</p>
+                    <h3>10. Заключительные положения</h3>
+                    <p><span class="rule-number">10.1.</span> При повторных нарушениях срок наказания может быть
+                        увеличен.</p>
+                    <p><span class="rule-number">10.2.</span> При нескольких нарушениях — наказание по наиболее
+                        серьезному.</p>
+                    <p><span class="rule-number">10.3.</span> В спорных ситуациях решение принимает старшая
+                        администрация.</p>
+                    <div style="border-left:4px solid #ff6b6b; padding-left:15px; margin-top:15px;">
+                        <h3>⚠️ Дополнительное правило</h3>
+                        <p><span class="rule-number">11.</span> Упоминание родителей других участников или администрации
+                            в негативном контексте строго запрещено.</p>
+                        <p class="punishment">⚡ Наказание: бан сроком 3 дня.</p>
+                    </div>
+                    <div style="border-left:4px solid #4ecdc4; padding-left:15px; margin-top:15px;">
+                        <h3>⚔️ Нападение</h3>
+                        <p>Нападением считается только действие, при котором игрок нанес другому игроку два или более
+                            удара. Один случайный или одиночный удар не считается нападением.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-rp" class="tab-content">
+                <div class="rules-block">
+                    <h2>🎭 RP-Нарушения</h2>
+                    <div class="rp-grid">
+                        <div class="rp-card">
+                            <div class="rp-name">DM</div>
+                            <div class="rp-desc">Убийство без IC-причины</div>
+                            <div class="rp-punish">⚡ Jail / Ban 1-3 дня</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">DB</div>
+                            <div class="rp-desc">Убийство или урон транспортом</div>
+                            <div class="rp-punish">⚡ Jail / Ban 1-3 дня</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">MG</div>
+                            <div class="rp-desc">Использование OOC-информации в IC</div>
+                            <div class="rp-punish">⚡ Jail / Ban до 2 дней</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">PG</div>
+                            <div class="rp-desc">Нереалистичные действия</div>
+                            <div class="rp-punish">⚡ Jail / Ban 1-2 дня</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">FailRP</div>
+                            <div class="rp-desc">Нарушение логики RP</div>
+                            <div class="rp-punish">⚡ Jail / Ban 1-3 дня</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">FearRP</div>
+                            <div class="rp-desc">Отсутствие страха за жизнь</div>
+                            <div class="rp-punish">⚡ Jail / Ban до 2 дней</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">RK</div>
+                            <div class="rp-desc">Месть после смерти</div>
+                            <div class="rp-punish">⚡ Ban 1-2 дня</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">SK</div>
+                            <div class="rp-desc">Убийство на месте спавна</div>
+                            <div class="rp-punish">⚡ Ban 2-5 дней</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">TK</div>
+                            <div class="rp-desc">Убийство союзника без причины</div>
+                            <div class="rp-punish">⚡ Jail / Ban до 2 дней</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">NonRP Drive</div>
+                            <div class="rp-desc">Нереалистичное вождение</div>
+                            <div class="rp-punish">⚡ Jail / Ban до 2 дней</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">Leave RP</div>
+                            <div class="rp-desc">Уход из игры во время RP</div>
+                            <div class="rp-punish">⚡ Ban 1-3 дня</div>
+                        </div>
+                        <div class="rp-card">
+                            <div class="rp-name">Abuse</div>
+                            <div class="rp-desc">Использование багов или уязвимостей</div>
+                            <div class="rp-punish">⚡ Ban 3-7 дней</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rules-block" style="border-left-color: #4ecdc4;">
+                    <h2>📖 NRP (Non-Role Play)</h2>
+                    <p style="color:#b0c0d0; margin-bottom:15px;">Действия, нарушающие атмосферу ролевой игры.</p>
+                    <p><span class="rule-number">•</span> Выходить из роли во время RP-ситуации.</p>
+                    <p><span class="rule-number">•</span> Использовать OOC-информацию в IC (метагейминг).</p>
+                    <p><span class="rule-number">•</span> Совершать нелогичные действия.</p>
+                    <p><span class="rule-number">•</span> Срывать RP-процесс шутками или флудом.</p>
+                    <p><span class="rule-number">•</span> Игнорировать последствия действий.</p>
+                    <p class="punishment" style="margin-top:15px;">⚡ Наказание: предупреждение, при повторных нарушениях
+                        — Ban 1-3 дней.</p>
+                </div>
+            </div>
+
+            <div id="tab-koap" class="tab-content">
+                <div class="rules-block">
+                    <h2>⚖️ КОАП и УК Украины</h2>
+                    <div class="koap-section-title"><span class="emoji">🚗</span> ПДД и транспорт</div>
+                    <div class="koap-grid">
+                        <div class="koap-item"><span class="koap-title">Ст. 122 КУоАП</span><span
+                                class="koap-desc">Нарушение ПДД</span><span class="koap-punish">Штраф 1000€ / КПЗ 5
+                                мин</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 123 КУоАП</span><span class="koap-desc">Ж/д
+                                переезд</span><span class="koap-punish">Штраф 4000€</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 124 КУоАП</span><span
+                                class="koap-desc">ДТП</span><span class="koap-punish">Штраф 2000€</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 126 КУоАП</span><span class="koap-desc">Без
+                                прав</span><span class="koap-punish">Штраф 4000€</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 130 КУоАП</span><span
+                                class="koap-desc">Вождение в опьянении</span><span class="koap-punish">Штраф 5000€ + КПЗ
+                                5 мин</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 122-4 КУоАП</span><span
+                                class="koap-desc">Оставление места ДТП</span><span class="koap-punish">Штраф
+                                5000€</span></div>
+                    </div>
+                    <div class="koap-section-title"><span class="emoji">🚓</span> Против полиции</div>
+                    <div class="koap-grid">
+                        <div class="koap-item"><span class="koap-title">Ст. 342 УК</span><span
+                                class="koap-desc">Неповиновение полиции</span><span class="koap-punish">КПЗ 10
+                                мин</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 345 УК</span><span
+                                class="koap-desc">Нападение на полицейского</span><span class="koap-punish">КПЗ 25
+                                мин</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 348 УК</span><span
+                                class="koap-desc">Убийство полицейского</span><span class="koap-punish">КПЗ 30
+                                мин</span></div>
+                    </div>
+                    <div class="koap-section-title"><span class="emoji">🔫</span> Оружие</div>
+                    <div class="koap-grid">
+                        <div class="koap-item"><span class="koap-title">Ст. 263 УК</span><span
+                                class="koap-desc">Незаконное оружие</span><span class="koap-punish">КПЗ 10 мин +
+                                изъятие</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 129 УК</span><span class="koap-desc">Угроза
+                                оружием</span><span class="koap-punish">КПЗ 10 мин</span></div>
+                    </div>
+                    <div class="koap-section-title"><span class="emoji">🧍</span> Преступления против граждан</div>
+                    <div class="koap-grid">
+                        <div class="koap-item"><span class="koap-title">Ст. 115 УК</span><span
+                                class="koap-desc">Убийство</span><span class="koap-punish">КПЗ 25 мин</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 146 УК</span><span
+                                class="koap-desc">Похищение человека</span><span class="koap-punish">КПЗ 20 мин</span>
+                        </div>
+                        <div class="koap-item"><span class="koap-title">Ст. 162 УК</span><span
+                                class="koap-desc">Незаконное проникновение</span><span class="koap-punish">Штраф
+                                5000€</span></div>
+                    </div>
+                    <div class="koap-section-title"><span class="emoji">💰</span> Кражи и ограбления</div>
+                    <div class="koap-grid">
+                        <div class="koap-item"><span class="koap-title">Ст. 185 УК</span><span
+                                class="koap-desc">Кража</span><span class="koap-punish">КПЗ 10 мин</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 186 УК</span><span
+                                class="koap-desc">Грабёж</span><span class="koap-punish">КПЗ 15 мин</span></div>
+                        <div class="koap-item"><span class="koap-title">Ст. 187 УК</span><span
+                                class="koap-desc">Разбой</span><span class="koap-punish">КПЗ 20 мин</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-resources" class="tab-content">
+                <div class="rules-block">
+                    <h2>📦 Ресурсы сервера</h2>
+                    <div class="resources-grid">
+                        <a href="https://www.roblox.com/share?v=v2&code=5ihdm3h6t35eko" target="_blank"
+                            class="resource-btn"><span class="icon">💻</span><span class="label">Код сервера</span><span
+                                class="sub">Roblox</span></a>
+                        <a href="https://t.me/HelpUkraine_2" target="_blank" class="resource-btn"><span
+                                class="icon">🆘</span><span class="label">Поддержка</span><span
+                                class="sub">Telegram</span></a>
+                        <a href="https://t.me/fraktionUA" target="_blank" class="resource-btn"><span
+                                class="icon">⚔️</span><span class="label">Фракции</span><span
+                                class="sub">Telegram</span></a>
+                        <a href="https://discord.gg/qBA8u7Burm" target="_blank" class="resource-btn"><span
+                                class="icon">🎮</span><span class="label">Discord</span><span
+                                class="sub">Присоединяйся</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== ВКЛАДКА: АДМИНЫ ===== -->
+            <div id="tab-admins" class="tab-content">
+                <div class="rules-block">
+                    <h2>👑 Администрация</h2>
+                    <p style="color:#b0c0d0; margin-bottom:20px;">Состав администрации проекта Украина РП.</p>
+                    <div class="admins-grid" id="adminsList"></div>
+                </div>
+            </div>
+
+            <div id="tab-complaint" class="tab-content">
+                <div class="rules-block">
+                    <h2>📩 Жалоба на администратора</h2>
+                    <form class="complaint-form" id="complaintForm">
+                        <input type="text" id="complaintAdmin" placeholder="Ник администратора" required>
+                        <input type="text" id="complaintMyNick" placeholder="Мой ник" required>
+                        <input type="datetime-local" id="complaintDateTime" required>
+                        <textarea id="complaintDesc" placeholder="Суть жалобы..." required></textarea>
+                        <textarea id="complaintReason" placeholder="Почему вы считаете действия неправомерными?"
+                            required></textarea>
+                        <input type="text" id="complaintProof" placeholder="Доказательства (ссылки)">
+                        <button type="submit">📨 Отправить жалобу</button>
+                    </form>
+                    <div id="complaintStatus" style="margin-top:15px;"></div>
+                </div>
+            </div>
+
+            <div id="tab-tickets" class="tab-content">
+                <div class="rules-block">
+                    <h2>🎫 Мои тикеты</h2>
+                    <div id="ticketList" class="ticket-list">
+                        <p style="color:#8899aa;">У вас пока нет тикетов.</p>
+                    </div>
+                </div>
+
+                <div class="rules-block hidden" id="ticketChatBlock">
+                    <h2>💬 Чат с поддержкой</h2>
+                    <div id="ticketChatTitle" style="color:#ffd700; margin-bottom:10px;"></div>
+                    <div class="chat-box" id="ticketChatMessages"></div>
+
+                    <div class="chat-input">
+                        <input type="text" id="ticketChatInput" placeholder="Введите сообщение...">
+                        <button id="sendTicketBtn">📤 Отправить</button>
+                        <button id="closeTicketBtn" style="background:#ff6b6b;">🔒 Закрыть тикет</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-adminpanel" class="tab-content">
+                <div class="rules-block">
+
+                    <h2>⚙️ Админ-панель</h2>
+
+                    <div class="admin-grid">
+                        <div class="admin-card-panel">
+                            <div class="stat-number" id="statVisits">0</div>
+                            <div class="stat-label">👁️ Посещений</div>
+                        </div>
+
+                        <div class="admin-card-panel">
+                            <div class="stat-number" id="statUsers">0</div>
+                            <div class="stat-label">👤 Зарегистрировано</div>
+                        </div>
+
+                        <div class="admin-card-panel">
+                            <div class="stat-number" id="statComplaints">0</div>
+                            <div class="stat-label">📩 Жалоб</div>
+                        </div>
+
+                        <div class="admin-card-panel">
+                            <div class="stat-number" id="statTickets">0</div>
+                            <div class="stat-label">🎫 Активных тикетов</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top:30px;">📋 Логи действий</h3>
+                    <div class="logs-container" id="logsContainer">
+                        <p style="color:#8899aa;">Логи будут отображаться здесь...</p>
+                    </div>
+
+                    <h3 style="margin-top:30px;">👥 Управление админами</h3>
+                    <div class="admin-user-list" id="adminUserList"></div>
+
+                    <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+                        <input type="text" id="addAdminLogin" placeholder="Логин пользователя"
+                            style="flex:1; padding:10px; background:rgba(0,0,0,0.4); border:1px solid #1a3a5c; border-radius:8px; color:#fff;">
+
+                        <select id="addAdminRole"
+                            style="padding:10px; background:rgba(0,0,0,0.4); border:1px solid #1a3a5c; border-radius:8px; color:#fff;">
+
+                            <option value="owner">Владелец</option>
+                            <option value="gladmin">Гл. Админ</option>
+                            <option value="stadmin">Ст. Админ</option>
+                            <option value="admin">Админ</option>
+                            <option value="mladmin">Мл. Админ</option>
+                            <option value="zam">Зам</option>
+                            <option value="curator">Куратор</option>
+                            <option value="trainee">Стажер</option>
+                            <option value="techadmin">Тех. Админ</option>
+
+                        </select>
+
+                        <button class="btn-gold" id="addAdminBtn">➕ Добавить</button>
+                    </div>
+
+                    <!-- ===== ЖАЛОБЫ ===== -->
+                    <h3 style="margin-top:30px;">📩 Жалобы</h3>
+
+                    <div id="adminComplaintsList" class="ticket-list">
+                        <p style="color:#8899aa;">Загрузка жалоб...</p>
+                    </div>
+
+                    <!-- ===== ТИКЕТЫ ===== -->
+                    <h3 style="margin-top:30px;">📩 Ответы на поддержку</h3>
+
+                    <div id="adminTicketsList" class="ticket-list"></div>
+
+                </div>
+            </div>
+
+            <div id="tab-creator" class="tab-content">
+                <div class="creator-block" id="creatorBlock">
+                    <h2>💛 Владелец сайта</h2>
+                    <div class="creator-name">trepow - Just_Simoo</div>
+                    <div class="creator-desc">
+                        <span>💫 Делает добро для проекта Украина РП</span><br>
+                        <span>🤝 Полностью бесплатно</span>
+                    </div>
+
+                    <a href="https://t.me/trepoweditor" target="_blank" class="telegram-link-big">
+                        📱 @trepoweditor
+                    </a>
+
+                    <div class="heart">❤️</div>
+
+                    <div class="free-badge">✅ Бесплатно для проекта</div>
+
+                    <div class="click-counter" id="clickCounter">
+                        Кликов: 0 / 15
+                    </div>
+                </div>
+            </div>
+
+            <script>
+               
+
+
+                    
+// ===== ДОБАВИТЬ ЛОГ =====
+
+async function addLog(action, target, details) {
+
+    try {
+
+        await fetch("/api/logs", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                user: currentUser ? currentUser.login : "system",
+
+                action: action,
+
+                target: target || "-",
+
+                details: details || ""
+
+            })
+
+        });
+
+        renderLogs();
+
+    } catch (e) {
+
+        console.error(e);
+
+    }
+
+}
+                let currentUser = null;
+                let currentTicketId = null;
+
+                // ===== АВТОРИЗАЦИЯ =====
+                function showRegister() {
+                    document.getElementById('loginBox').classList.add('hidden');
+                    document.getElementById('registerBox').classList.remove('hidden');
+                }
+
+                function showLogin() {
+                    document.getElementById('registerBox').classList.add('hidden');
+                    document.getElementById('loginBox').classList.remove('hidden');
+                }
+
+                async function register() {
+
+                    const login = document.getElementById('regUser').value.trim();
+                    const password = document.getElementById('regPass').value.trim();
+                    const nick = document.getElementById('regNick').value.trim();
+
+                    const err = document.getElementById('regError');
+                    const succ = document.getElementById('regSuccess');
+
+                    err.textContent = '';
+                    succ.textContent = '';
+
+                    const response = await fetch('/api/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            login,
+                            password,
+                            nick
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (!data.success) {
+                        err.textContent = data.message;
+                        return;
+                    }
+
+                    succ.textContent = '✅ Регистрация успешна!';
+
+                    document.getElementById('regUser').value = '';
+                    document.getElementById('regPass').value = '';
+                    document.getElementById('regNick').value = '';
+
+                    setTimeout(showLogin, 1500);
+                }
+
+                async function login() {
+
+                    const login = document.getElementById('loginUser').value.trim();
+                    const pass = document.getElementById('loginPass').value.trim();
+                    const err = document.getElementById('loginError');
+
+                    err.textContent = '';
+
+                    try {
+
+                        const response = await fetch('/api/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                login: login,
+                                password: pass
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (!data.success) {
+                            err.textContent = data.message;
+                            return;
+                        }
+
+                        currentUser = data.user;
+
+                        document.getElementById('authSection').classList.add('hidden');
+                        document.getElementById('appSection').classList.remove('hidden');
+
+                        document.getElementById('currentUserDisplay').textContent = currentUser.nick;
+                        document.getElementById('currentRoleDisplay').textContent = currentUser.role;
+
+                        const adminRoles = [
+                            'owner',
+                            'admin',
+                            'gladmin',
+                            'stadmin',
+                            'mladmin',
+                            'zam',
+                            'curator',
+                            'trainee',
+                            'techadmin'
+                        ];
+
+                        if (adminRoles.includes(currentUser.role)) {
+                            document.getElementById('adminPanelBtn').classList.remove('hidden');
+                        }
+
+                        renderAdmins();
+                        renderTickets();
+                        renderAdminTickets();
+                        updateStats();
+                        renderAdminUsers();
+                        renderLogs();
+                        loadComplaints(); // ← загрузка жалоб из SQLite
+
+                        switchTab('rules');
+
+                    } catch (e) {
+                        console.error(e);
+                        err.textContent = "Ошибка соединения с сервером";
+                    }
+
+                }
+
+                function logout() {
+
+                    if (currentUser) {
+                        addLog('Выход', currentUser.login, 'Вышел из системы');
+                    }
+
+                    currentUser = null;
+                    currentTicketId = null;
+
+                    localStorage.removeItem('ukraine_rp_current_user');
+
+                    document.getElementById('appSection').classList.add('hidden');
+                    document.getElementById('authSection').classList.remove('hidden');
+
+                    document.getElementById('loginUser').value = '';
+                    document.getElementById('loginPass').value = '';
+
+                    document.getElementById('adminPanelBtn').classList.add('hidden');
+
+                    switchTab('rules');
+
+                }
+
+                function switchTab(target) {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    const btn = document.querySelector(`.tab-btn[data-tab="${target}"]`);
+                    if (btn) btn.classList.add('active');
+                    const content = document.getElementById('tab-' + target);
+                    if (content) content.classList.add('active');
+                }
+
+                // ===== РЕНДЕР АДМИНОВ =====
+
+async function renderAdmins() {
+
+    const container = document.getElementById("adminsList");
+
+    try {
+
+        const response = await fetch("/api/users");
+        const users = await response.json();
+
+        const adminRoles = [
+            "owner",
+            "gladmin",
+            "stadmin",
+            "admin",
+            "mladmin",
+            "zam",
+            "curator",
+            "trainee",
+            "techadmin"
+        ];
+
+        const admins = users.filter(
+            u => adminRoles.includes(u.role) && u.login !== "trepow"
+        );
+
+        if (admins.length === 0) {
+
+            container.innerHTML =
+                '<p style="color:#8899aa;">Администраторов пока нет.</p>';
+
+            return;
+
+        }
+
+        const roleOrder = {
+            owner: 0,
+            gladmin: 1,
+            stadmin: 2,
+            admin: 3,
+            mladmin: 4,
+            zam: 5,
+            curator: 6,
+            trainee: 7,
+            techadmin: 8
+        };
+
+        admins.sort((a, b) =>
+            (roleOrder[a.role] || 99) -
+            (roleOrder[b.role] || 99)
+        );
+
+        const roleMap = {
+
+            owner: {
+                label: "⭐ Владелец",
+                badge: "badge-owner",
+                avatar: "👑"
+            },
+
+            gladmin: {
+                label: "⚡ Гл. Админ",
+                badge: "badge-gladmin",
+                avatar: "⚡"
+            },
+
+            stadmin: {
+                label: "🔥 Ст. Админ",
+                badge: "badge-stadmin",
+                avatar: "🔥"
+            },
+
+            admin: {
+                label: "🛡️ Админ",
+                badge: "badge-admin",
+                avatar: "🛡️"
+            },
+
+            mladmin: {
+                label: "🌱 Мл. Админ",
+                badge: "badge-mladmin",
+                avatar: "🌱"
+            },
+
+            zam: {
+                label: "🔹 Зам",
+                badge: "badge-zam",
+                avatar: "🔹"
+            },
+
+            curator: {
+                label: "🎯 Куратор",
+                badge: "badge-curator",
+                avatar: "🎯"
+            },
+
+            trainee: {
+                label: "🔰 Стажер",
+                badge: "badge-trainee",
+                avatar: "🔰"
+            },
+
+            techadmin: {
+                label: "💻 Тех. Админ",
+                badge: "badge-techadmin",
+                avatar: "💻"
+            }
+
+        };
+
+                    const telegramMap = { 'Vasylwolk': 'Vasylwolk', 'xeurq': 'xeurq', 'ea7_633': 'ea7_633' };
+
+                    let html = '';
+                    admins.forEach(a => {
+                        const info = roleMap[a.role] || { label: a.role, badge: '', avatar: '👤' };
+                        const pinned = a.role === 'owner' ? 'pinned' : '';
+                        const tgUsername = telegramMap[a.login] || a.login;
+
+                        html += `
+                    <div class="admin-card ${pinned}">
+                        <span class="avatar">${info.avatar}</span>
+                        <div class="name">${a.nick || a.login}</div>
+                        <div class="role">${info.label}</div>
+                        <span class="badge ${info.badge}">${info.label}</span>
+                        <a href="https://t.me/${tgUsername}" target="_blank" class="telegram-link">📱 @${tgUsername}</a>
+                    </div>
+                `;
+                    });
+                                        container.innerHTML = html;
+
+    } catch (e) {
+
+        console.error(e);
+
+        container.innerHTML =
+            '<p style="color:#ff5555;">Ошибка загрузки администраторов.</p>';
+
+    }
+
+}
+
+// ===== РЕНДЕР ЛОГОВ =====
+
+                   // ===== РЕНДЕР ЛОГОВ =====
+
+async function renderLogs() {
+
+    const container = document.getElementById("logsContainer");
+
+    try {
+
+        const response = await fetch("/api/logs");
+        const logs = await response.json();
+
+        if (!logs || logs.length === 0) {
+
+            container.innerHTML =
+                '<p style="color:#8899aa;">Логов пока нет.</p>';
+
+            return;
+
+        }
+
+        let html = "";
+
+        const reverseLogs = logs.slice().reverse();
+
+        reverseLogs.forEach(log => {
+
+            const time = new Date(log.time).toLocaleString();
+
+            let logClass = "log-edit";
+
+            if (
+                log.action.includes("Удаление") ||
+                log.action.includes("Снятие")
+            ) {
+                logClass = "log-remove";
+            }
+
+            if (
+                log.action.includes("Добавление") ||
+                log.action.includes("Назначение")
+            ) {
+                logClass = "log-add";
+            }
+
+            html += `
+                <div class="log-entry ${logClass}">
+                    <span>
+                        <span class="log-time">${time}</span>
+                        <span class="log-user">${log.user}</span>
+                        <span class="log-action">${log.action}</span>
+                        <span class="log-target">${log.target}</span>
+                    </span>
+                    <span style="color:#8899aa;font-size:0.8rem;">
+                        ${log.details || ""}
+                    </span>
+                </div>
+            `;
+
+        });
+
+        container.innerHTML = html;
+
+    } catch (e) {
+
+        console.error(e);
+
+        container.innerHTML =
+            '<p style="color:#ff5555;">Ошибка загрузки логов.</p>';
+
+    }
+
+}
+                // ===== ЖАЛОБЫ =====
+                async function submitComplaint(e) {
+                    e.preventDefault();
+
+                    if (!currentUser) {
+                        alert("Сначала войдите в аккаунт!");
+                        return;
+                    }
+
+                    const admin = document.getElementById("complaintAdmin").value.trim();
+                    const myNick = document.getElementById("complaintMyNick").value.trim();
+                    const dateTime = document.getElementById("complaintDateTime").value;
+                    const desc = document.getElementById("complaintDesc").value.trim();
+                    const reason = document.getElementById("complaintReason").value.trim();
+                    const proof = document.getElementById("complaintProof").value.trim();
+
+                    if (!admin || !myNick || !dateTime || !desc || !reason) {
+                        document.getElementById("complaintStatus").innerHTML =
+                            '<span style="color:#ff6b6b;">❌ Заполните все поля!</span>';
+                        return;
+                    }
+
+                    try {
+
+                        const response = await fetch("/api/complaints", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                author: currentUser.nick,
+                                against: admin,
+                                reason:
+                                    "👤 Ник заявителя: " + myNick +
+                                    "\n📅 Дата нарушения: " + dateTime +
+                                    "\n\n📝 Описание:\n" + desc +
+                                    "\n\n❓ Почему неправомерно:\n" + reason +
+                                    "\n\n📎 Доказательства:\n" + (proof || "нет")
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (!data.success) {
+                            document.getElementById("complaintStatus").innerHTML =
+                                '<span style="color:#ff6b6b;">❌ ' + data.message + '</span>';
+                            return;
+                        }
+
+                        document.getElementById("complaintStatus").innerHTML =
+                            '<span style="color:#4ecdc4;">✅ Жалоба отправлена!</span>';
+
+                        document.getElementById("complaintAdmin").value = "";
+                        document.getElementById("complaintMyNick").value = "";
+                        document.getElementById("complaintDateTime").value = "";
+                        document.getElementById("complaintDesc").value = "";
+                        document.getElementById("complaintReason").value = "";
+                        document.getElementById("complaintProof").value = "";
+
+                        if (typeof loadComplaints === "function") {
+                            loadComplaints();
+                        }
+
+                    } catch (err) {
+
+                        console.error(err);
+
+                        document.getElementById("complaintStatus").innerHTML =
+                            '<span style="color:#ff6b6b;">❌ Ошибка соединения с сервером.</span>';
+
+                    }
+                }
+                // ===== ТИКЕТЫ =====
+
+async function renderTickets() {
+
+    const container = document.getElementById("ticketList");
+
+    try {
+
+        const response = await fetch("/api/tickets");
+        const tickets = await response.json();
+
+        const userTickets = tickets.filter(
+            t => t.user === currentUser.login
+        );
+
+        if (userTickets.length === 0) {
+
+            container.innerHTML =
+                '<p style="color:#8899aa;">У вас пока нет тикетов.</p>';
+
+            return;
+
+        }
+
+        let html = "";
+
+        userTickets.forEach(t => {
+
+            const isOpen =
+                t.status === "open" ||
+                t.status === "Открыт";
+
+            const statusClass =
+                isOpen ? "open" : "closed";
+
+            const statusText =
+                isOpen
+                    ? "🟢 Открыт"
+                    : "🔴 Закрыт";
+
+            let preview = "Нет сообщений";
+
+            if (t.messages && t.messages.length > 0) {
+
+                preview =
+                    t.messages[0].text.substring(0, 50) + "...";
+
+            }
+
+            html += `
+                <div class="ticket-card"
+                     onclick="openTicket(${t.id})">
+
+                    <div class="ticket-header">
+
+                        <span class="ticket-user">
+                            ${t.subject || "Тикет"}
+                        </span>
+
+                        <span class="ticket-status ${statusClass}">
+                            ${statusText}
+                        </span>
+
+                    </div>
+
+                    <div class="ticket-preview">
+                        ${preview}
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+        container.innerHTML = html;
+
+    } catch (e) {
+
+        console.error(e);
+
+        container.innerHTML =
+            '<p style="color:red;">Ошибка загрузки тикетов.</p>';
+
+    }
+
+}
+         window.openTicket = async function (ticketId) {
+
+    currentTicketId = ticketId;
+
+    document.getElementById("ticketChatBlock").classList.remove("hidden");
+
+    try {
+
+        const response = await fetch("/api/tickets");
+        const tickets = await response.json();
+
+        const ticket = tickets.find(t => t.id == ticketId);
+
+        if (!ticket) return;
+
+        document.getElementById("ticketChatTitle").textContent =
+            `🎫 ${ticket.subject || "Тикет"} (${ticket.user})`;
+
+        await renderTicketMessages();
+
+        switchTab("tickets");
+
+    } catch (e) {
+
+        console.error(e);
+        alert("Ошибка загрузки тикета.");
+
+    }
+
+}
+
+                async function renderTicketMessages() {
+
+    try {
+
+        const response = await fetch("/api/tickets");
+        const tickets = await response.json();
+
+        const ticket = tickets.find(t => t.id == currentTicketId);
+
+        if (!ticket) return;
+
+        const container = document.getElementById("ticketChatMessages");
+
+        let html = "";
+
+        ticket.messages = ticket.messages || [];
+
+        ticket.messages.forEach(m => {
+
+            const isUser = m.sender === currentUser.login;
+
+            html += `
+                <div class="chat-message ${isUser ? "user" : "admin"}">
+
+                    <div class="msg-user">
+                        ${m.sender}
+                        (${isUser ? "Вы" : "Админ"})
+                    </div>
+
+                    <div style="white-space:pre-wrap;">
+                        ${m.text}
+                    </div>
+
+                    <div style="font-size:12px;color:#8899aa;">
+                        ${m.time}
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+        container.innerHTML = html;
+
+        container.scrollTop = container.scrollHeight;
+
+    } catch (e) {
+
+        console.error(e);
+
+    }
+
+}
+
+                 // ===== ОТПРАВИТЬ СООБЩЕНИЕ В ТИКЕТ =====
+
+async function sendTicketMessage() {
+
+    const input = document.getElementById("ticketChatInput");
+    const text = input.value.trim();
+
+    if (!text || !currentTicketId) return;
+
+    try {
+
+        const response = await fetch("/api/tickets/" + currentTicketId + "/message", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                sender: currentUser.login,
+                text: text
+
+            })
+
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+
+            alert("Не удалось отправить сообщение.");
+            return;
+
+        }
+
+        input.value = "";
+
+        await renderTicketMessages();
+        await renderTickets();
+        await renderAdminTickets();
+
+    } catch (e) {
+
+        console.error(e);
+        alert("Ошибка соединения с сервером.");
+
+    }
+
+}
+                // ===== ЗАКРЫТЬ ТИКЕТ =====
+
+async function closeTicket() {
+
+    if (!confirm("Закрыть этот тикет?")) return;
+
+    try {
+
+        const response = await fetch("/api/tickets/" + currentTicketId, {
+
+            method: "PATCH",
+
+            headers: {
+                "Content-Type": "application/json"
+            }
+
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+
+            alert("Не удалось закрыть тикет.");
+            return;
+
+        }
+
+        alert("✅ Тикет закрыт!");
+
+        document.getElementById("ticketChatBlock").classList.add("hidden");
+
+        currentTicketId = null;
+
+        await renderTickets();
+        await renderAdminTickets();
+
+        updateStats();
+
+    } catch (e) {
+
+        console.error(e);
+        alert("Ошибка соединения с сервером.");
+
+    }
+
+}
+
+                // ===== АДМИН-ПАНЕЛЬ =====
+
+async function renderAdminTickets() {
+
+    const container = document.getElementById("adminTicketsList");
+
+    try {
+
+        const response = await fetch("/api/tickets");
+        const tickets = await response.json();
+
+        const openTickets = tickets.filter(
+            t => t.status === "open" || t.status === "Открыт"
+        );
+
+        if (openTickets.length === 0) {
+
+            container.innerHTML =
+                '<p style="color:#8899aa;">Нет активных тикетов.</p>';
+
+            return;
+
+        }
+
+        let html = "";
+
+        openTickets.forEach(t => {
+
+            let preview = "Нет сообщений";
+
+            if (t.messages && t.messages.length > 0) {
+                preview = t.messages[0].text.substring(0, 50) + "...";
+            }
+
+            html += `
+                <div class="ticket-card"
+                     onclick="openAdminTicket(${t.id})">
+
+                    <div class="ticket-header">
+
+                        <span class="ticket-user">
+                            ${t.user} (${t.subject || "Тикет"})
+                        </span>
+
+                        <span class="ticket-status open">
+                            🟢 Открыт
+                        </span>
+
+                    </div>
+
+                    <div class="ticket-preview">
+                        ${preview}
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+        container.innerHTML = html;
+
+    } catch (e) {
+
+        console.error(e);
+
+        container.innerHTML =
+            '<p style="color:red;">Ошибка загрузки тикетов.</p>';
+
+    }
+
+}
+
+                window.openAdminTicket = function (ticketId) {
+                    currentTicketId = ticketId;
+                    document.getElementById('ticketChatBlock').classList.remove('hidden');
+                    
+                    const ticket = db.tickets.find(t => t.id === ticketId);
+                    if (!ticket) return;
+                    document.getElementById('ticketChatTitle').textContent = `🎫 Тикет от ${ticket.user} (${ticket.subject || 'Тикет'})`;
+                    renderTicketMessages();
+                    switchTab('tickets');
+                }
+
+               // ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
+
+async function updateStats() {
+
+    try {
+
+        const response = await fetch("/api/stats");
+        const stats = await response.json();
+
+        document.getElementById("statVisits").textContent = stats.visits || 0;
+        document.getElementById("statUsers").textContent = stats.users || 0;
+        document.getElementById("statComplaints").textContent = stats.complaints || 0;
+        document.getElementById("statTickets").textContent = stats.tickets || 0;
+
+    } catch (e) {
+
+        console.error(e);
+
+    }
+
+}
+                // ===== УПРАВЛЕНИЕ АДМИНАМИ =====
+                async function renderAdminUsers() {
+
+    const container = document.getElementById("adminUserList");
+
+    try {
+
+        const response = await fetch("/api/users");
+        const users = await response.json();
+
+        const adminRoles = [
+            "owner",
+            "gladmin",
+            "stadmin",
+            "admin",
+            "mladmin",
+            "zam",
+            "curator",
+            "trainee",
+            "techadmin"
+        ];
+
+        const admins = users.filter(u => adminRoles.includes(u.role));
+
+        if (admins.length === 0) {
+            container.innerHTML =
+                '<p style="color:#8899aa;">Администраторов нет.</p>';
+            return;
+        }
+
+        const roleMap = {
+            owner: "⭐ Владелец",
+            gladmin: "⚡ Гл. Админ",
+            stadmin: "🔥 Ст. Админ",
+            admin: "🛡️ Админ",
+            mladmin: "🌱 Мл. Админ",
+            zam: "🔹 Зам",
+            curator: "🎯 Куратор",
+            trainee: "🔰 Стажер",
+            techadmin: "💻 Тех. Админ"
+        };
+
+        const canRemove =
+            currentUser &&
+            (currentUser.role === "owner" ||
+             currentUser.login === "trepow");
+
+        let html = "";
+
+        admins.forEach(a => {
+
+            const isOwner = a.role === "owner";
+            const isProtected = isOwner || a.login === "trepow";
+
+            const showRemove =
+                canRemove &&
+                !isProtected &&
+                a.login !== currentUser?.login;
+
+            html += `
+                <div class="admin-user-item">
+
+                    <div class="user-info">
+
+                        <strong>${a.nick || a.login}</strong><br>
+
+                        <span class="user-role">
+                            ${roleMap[a.role] || a.role}
+                        </span><br>
+
+                        <span style="color:#8899aa;font-size:12px;">
+                            @${a.login}
+                        </span>
+
+                        ${
+                            isProtected
+                                ? '<br><span style="color:#ffd700;">🔒 Защищён</span>'
+                                : ""
+                        }
+
+                    </div>
+
+                    ${
+                        showRemove
+                            ? `<button class="btn-red"
+                                onclick="removeAdmin('${a.login}')">
+                                🗑️ Снять
+                               </button>`
+                            : isOwner
+                                ? '<span style="color:#ffd700;">👑 Владелец</span>'
+                                : a.login === currentUser?.login
+                                    ? '<span style="color:#8899aa;">Вы</span>'
+                                    : '<span style="color:#8899aa;">🔒</span>'
+                    }
+
+                </div>
+            `;
+
+        });
+
+        container.innerHTML = html;
+
+    } catch (e) {
+
+        console.error(e);
+
+        container.innerHTML =
+            '<p style="color:red;">Ошибка загрузки пользователей.</p>';
+
+    }
+
+}
+
+                async function addAdmin() {
+
+    const login = document.getElementById("addAdminLogin").value.trim();
+    const role = document.getElementById("addAdminRole").value;
+
+    if (!login) {
+        alert("Введите логин!");
+        return;
+    }
+
+    try {
+
+        // Получаем пользователей с сервера
+        const response = await fetch("/api/users");
+        const users = await response.json();
+
+        const user = users.find(u => u.login === login);
+
+        if (!user) {
+            alert("Пользователь не найден!");
+            return;
+        }
+
+        const adminRoles = [
+            "owner",
+            "gladmin",
+            "stadmin",
+            "admin",
+            "mladmin",
+            "zam",
+            "curator",
+            "trainee",
+            "techadmin"
+        ];
+
+        if (adminRoles.includes(user.role)) {
+            alert("Этот пользователь уже является администратором!");
+            return;
+        }
+
+        // Меняем роль через сервер
+        const update = await fetch("/api/users/" + user.id + "/role", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                role: role
+            })
+        });
+
+        const result = await update.json();
+
+        if (!result.success) {
+            alert("Не удалось назначить администратора.");
+            return;
+        }
+
+        alert("✅ Администратор успешно назначен!");
+
+        document.getElementById("addAdminLogin").value = "";
+
+        renderAdminUsers();
+        renderAdmins();
+        updateStats();
+
+      } catch (e) {
+
+        console.error(e);
+        alert("Ошибка соединения с сервером.");
+
+    }
+
+}   // <-- ЭТОЙ СКОБКИ НЕ ХВАТАЕТ
+
+window.removeAdmin = async function (login) {
+
+    if (!confirm(`Снять администратора ${login}?`)) return;
+
+    try {
+
+        // Получаем пользователей
+        const response = await fetch("/api/users");
+        const users = await response.json();
+
+        const user = users.find(u => u.login === login);
+
+        if (!user) {
+            alert("❌ Пользователь не найден!");
+            return;
+        }
+
+        if (user.role === "owner" || user.login === "trepow") {
+            alert("❌ Нельзя снять владельца или защищённого администратора!");
+            return;
+        }
+
+        // Меняем роль обратно на user
+        const update = await fetch("/api/users/" + user.id + "/role", {
+
+            method: "PATCH",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                role: "user"
+            })
+
+        });
+
+        const result = await update.json();
+
+        if (!result.success) {
+            alert("❌ Ошибка сервера.");
+            return;
+        }
+
+        alert("✅ Администратор снят!");
+
+        renderAdminUsers();
+        renderAdmins();
+        updateStats();
+
+    } catch (e) {
+
+        console.error(e);
+        alert("Ошибка соединения с сервером.");
+
+    }
+
+}
+                // ===== ПАСХАЛКА =====
+                let clickCount = 0;
+                document.getElementById('creatorBlock')?.addEventListener('click', function (e) {
+                    if (e.target.tagName === 'A') return;
+                    clickCount++;
+                    const counter = document.getElementById('clickCounter');
+                    if (counter) counter.textContent = 'Кликов: ' + clickCount + ' / 15';
+                    if (clickCount >= 15) {
+                        document.getElementById('easterEggModal').classList.add('active');
+                        clickCount = 0;
+                        if (counter) counter.textContent = 'Кликов: 0 / 15';
+                    }
+                });
+
+                document.getElementById('modalCloseBtn')?.addEventListener('click', function () {
+                    document.getElementById('easterEggModal').classList.remove('active');
+                });
+
+                document.getElementById('easterEggModal')?.addEventListener('click', function (e) {
+                    if (e.target === this) this.classList.remove('active');
+                });
+
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') document.getElementById('easterEggModal')?.classList.remove('active');
+                });
+
+                // ===== СНЕГ =====
+                const snowContainer = document.getElementById('snow-container');
+                const snowflakes = ['❄', '❅', '❆', '✦'];
+                setInterval(() => {
+                    const snow = document.createElement('div');
+                    snow.classList.add('snowflake');
+                    snow.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                    snow.style.left = Math.random() * 100 + '%';
+                    snow.style.fontSize = (Math.random() * 16 + 8) + 'px';
+                    snow.style.animationDuration = (Math.random() * 10 + 8) + 's';
+                    snow.style.animationDelay = (Math.random() * 5) + 's';
+                    snow.style.opacity = Math.random() * 0.7 + 0.3;
+                    snowContainer.appendChild(snow);
+                    setTimeout(() => snow.remove(), 18000);
+                }, 300);
+
+                // ===== СОБЫТИЯ =====
+                document.getElementById('loginBtn').addEventListener('click', login);
+                document.getElementById('registerBtn').addEventListener('click', register);
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+                document.getElementById('showRegisterLink').addEventListener('click', showRegister);
+                document.getElementById('showLoginLink').addEventListener('click', showLogin);
+                document.getElementById('addAdminBtn').addEventListener('click', addAdmin);
+                document.getElementById('sendTicketBtn').addEventListener('click', sendTicketMessage);
+                document.getElementById('closeTicketBtn').addEventListener('click', closeTicket);
+
+                // Обработка формы жалобы
+                document.getElementById('complaintForm').addEventListener('submit', function (e) {
+                    submitComplaint(e);
+                });
+
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        switchTab(this.dataset.tab);
+                    });
+                });
+
+                // ===== ИНИЦИАЛИЗАЦИЯ =====
+
+    const savedUser = localStorage.getItem("ukraine_rp_current_user");
+
+    if (savedUser) {
+
+        fetch("/api/users")
+            .then(response => response.json())
+            .then(users => {
+
+                const user = users.find(u => u.login === savedUser);
+
+                if (!user) return;
+
+                currentUser = user;
+
+            document.getElementById("authSection").classList.add("hidden");
+            document.getElementById("appSection").classList.remove("hidden");
+
+            document.getElementById("currentUserDisplay").textContent =
+                user.nick || user.login;
+
+            document.getElementById("currentRoleDisplay").textContent =
+                user.role;
+
+            const adminRoles = [
+                "owner",
+                "gladmin",
+                "stadmin",
+                "admin",
+                "mladmin",
+                "zam",
+                "curator",
+                "trainee",
+                "techadmin"
+            ];
+
+            if (adminRoles.includes(user.role)) {
+                document.getElementById("adminPanelBtn").classList.remove("hidden");
+            }
+
+            renderAdmins();
+            renderTickets();
+            renderAdminTickets();
+            updateStats();
+            renderAdminUsers();
+            renderLogs();
+
+            switchTab("rules");
+
+        })
+        .catch(err => {
+
+            console.error(err);
+
+            alert("Ошибка загрузки пользователя.");
+
+        });
+
+}
+
+// ===== ЖАЛОБЫ =====
+
+async function loadComplaints() {
+
+    try {
+
+        const response = await fetch("/api/complaints");
+        const complaints = await response.json();
+
+        const list = document.getElementById("adminComplaintsList");
+
+        if (!list) return;
+
+        if (complaints.length === 0) {
+            list.innerHTML = "<p style='color:#8899aa;'>Жалоб пока нет.</p>";
+            return;
+        }
+
+        list.innerHTML = "";
+
+        complaints.forEach(c => {
+
+            let color = "#ffd700";
+
+            if (c.status === "Принята") color = "#4CAF50";
+            if (c.status === "Отклонена") color = "#ff5555";
+
+            list.innerHTML += `
+                <div class="ticket-card">
+
+                    <h3>📩 Жалоба #${c.id}</h3>
+
+                    <p><b>👤 От:</b> ${c.author}</p>
+
+                    <p><b>⚔ На:</b> ${c.against}</p>
+
+                    <p>
+                        <b>Статус:</b>
+                        <span style="color:${color};font-weight:bold;">
+                            ${c.status}
+                        </span>
+                    </p>
+
+                    <pre style="white-space:pre-wrap;">${c.reason}</pre>
+
+                    <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+
+                        <button class="btn-gold"
+                            onclick="changeComplaintStatus(${c.id}, 'Принята')">
+                            ✅ Принять
+                        </button>
+
+                        <button class="btn-gold"
+                            onclick="changeComplaintStatus(${c.id}, 'Отклонена')">
+                            ❌ Отклонить
+                        </button>
+
+                        <button
+                            style="background:#d63b3b;color:#fff;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;"
+                            onclick="deleteComplaint(${c.id})">
+                            🗑 Удалить
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+    } catch (err) {
+        console.error(err);
+    }
+
+}
+
+async function changeComplaintStatus(id, status) {
+
+    await fetch("/api/complaints/" + id, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ status })
+    });
+
+    loadComplaints();
+
+}
+
+async function deleteComplaint(id) {
+
+    if (!confirm("Удалить жалобу?")) return;
+
+    await fetch("/api/complaints/" + id, {
+        method: "DELETE"
+    });
+
+    loadComplaints();
+
+}
+
+            </script>
+</body>
+</html>
